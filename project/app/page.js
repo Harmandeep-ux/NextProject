@@ -9,15 +9,23 @@ const [todo, settodo] = useState([])
 const [title, settitle] = useState('')
 
 useEffect(()=>{
-  axios.get('/api/todos').then((res)=>{
-    settodo(res.data)
-  })
+  getTodo()
 },[])
+
+async function getTodo() {
+  try{
+   const res = await axios.get('/api/todos')
+   settodo(res.data)
+  }catch(err){
+    console.error('error while getting todo')
+  }
+}
 
 async function addTodo() {
 const res =  await axios.post('/api/todos',{title})
 settodo([...todo , res.data])
 settitle("")
+console.log(todo)
 }
   return (
     <div>
@@ -28,6 +36,15 @@ settitle("")
       onChange={(e)=>settitle(e.target.value)}
       />
       <button onClick={addTodo}>Add </button>
+ 
+     <div>
+      <h2>SHOW ALL TODOS</h2>
+     {todo.length == 0 ? "no todos here" : (
+      <ul>{todo.map((t)=>(
+        <div key={t}>{t.title}</div>
+      ))}</ul>
+     )}
+     </div>
     </div>
   )
 }
