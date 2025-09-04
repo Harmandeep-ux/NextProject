@@ -18,3 +18,13 @@ export async function POST(req) {
      })
      return Response.json(todo)
 }
+
+export async function DELETE(req,{params}) {
+    const {id} = parseInt(params.id)
+
+    const todo = await prisma.todo.DELETE({
+        where: {id}
+    })
+
+    return Response.json("Todo Deleted")
+}
