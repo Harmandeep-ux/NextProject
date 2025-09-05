@@ -27,6 +27,17 @@ settodo([...todo , res.data])
 settitle("")
 console.log(todo)
 }
+
+async function deleteTodo(id) {
+  await axios.delete(`/api/todos/${id}`)
+ settodo(todo.filter((t)=>t.id != id ))
+ alert("todo delted")
+}
+
+async function updateTodo(id){
+  const res = await axios.put(`/api/todos/${id}`,{title})
+  settodo(todo.map((t)=>t.id == id ? res.data : t))
+}
   return (
     <div>
       <h1>TODOS</h1>
@@ -41,7 +52,12 @@ console.log(todo)
       <h2>SHOW ALL TODOS</h2>
      {todo.length == 0 ? "no todos here" : (
       <ul>{todo.map((t)=>(
-        <div key={t}>{t.title}</div>
+        <div key={t.id}>
+          {t.title}
+          <button onClick={()=>deleteTodo(t.id)}>delete</button>
+          <button onClick={()=>updateTodo(t.id)}>update</button>
+          </div>
+       
       ))}</ul>
      )}
      </div>

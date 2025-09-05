@@ -26,5 +26,6 @@ export async function DELETE(req,{params}) {
         where: {id}
     })
 
-    return Response.json("Todo Deleted")
+    return Response.json(todo,"Todo Deleted")
 }
+
