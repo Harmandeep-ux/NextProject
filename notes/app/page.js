@@ -18,6 +18,16 @@ const page = () => {
        
   }
 
+  const updateNotes = async (id) =>{
+    const res = await axios.post(`/api/notes/${id}`,{title,content})
+    setnotes(notes.map((t)=>t.id === id ? res.data : t))
+  }
+
+  const deleteNotes = async (id) =>{
+    const res = await axios.delete(`/api/notes/${id}`)
+    setnotes(notes.filter((t)=>t.id !== res.data.id))
+  }
+
   const sendNotes = async () => {
      const res = await axios.post('/api/notes/',{title,content})
      setnotes([...notes, res.data])
@@ -25,7 +35,6 @@ const page = () => {
      setcontent('')
   }
 
-   
   return (
     <>
     <h1> Notes</h1>
@@ -39,6 +48,7 @@ const page = () => {
       onChange={(e) => settitle(e.target.value)}
       />
       <br />
+     
       <br />
      <input 
      value={content}
@@ -61,6 +71,9 @@ const page = () => {
           content:{note.content}
               <p><i>Created At:</i> {new Date(note.createdAt).toLocaleString()}</p>
 
+            <br/>
+            <button onClick={()=>deleteNotes(note.id)}>Delete Note</button>
+            <button onClick={()=>updateNotes(note.id)}>update Note</button>
         </div>
       ))
       )}
